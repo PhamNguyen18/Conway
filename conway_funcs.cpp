@@ -1,22 +1,16 @@
-/*
- TODO:
-    * Implement periodic boundary conditions
-    * Fix seg fault when creating board larger 
-      than default specified in class
- */ 
+#include<unistd.h>
 #include<cstdlib>
 using std::rand; using std::srand;
 #include<fstream>
 using std::ifstream; using std::ofstream;
 #include<iostream>
 using std::cout; using std::endl;
+#include<stdexcept>
+using std::range_error;
 #include<string>
 using std::string;
 #include<vector>
 using std::vector;
-#include<stdexcept>
-using std::range_error;
-#include<unistd.h>
 
 #include "conway_funcs.h"
 
@@ -24,7 +18,7 @@ using BoardRow = vector<unsigned int>;
 using Board = vector<BoardRow>;
 
 unsigned int ConwayGameOfLife::get_cell(const Board &board, long row, long col) {
-    // Test periodic boundary conditions
+    // Allows for wrap around behavior for neighbors outside of board limits
     if (row < 0)
         row = size - 1;
     if (row == size)
@@ -33,13 +27,12 @@ unsigned int ConwayGameOfLife::get_cell(const Board &board, long row, long col) 
         col = size - 1;
     if (col == size)
         col = 0;
-    
+
     return board[row][col];
 }
 
 
 void ConwayGameOfLife::set_cell(Board &board, long row, long col, unsigned int value) {
-    // Specify if a cell is dead (0) or alive (1)
     if (value == 0 || value == 1) {
         board[row][col] = value;
     } else {
@@ -61,7 +54,8 @@ unsigned int ConwayGameOfLife::count_neighbors(const Board &board, long row, lon
 
 void ConwayGameOfLife::update_board(const Board &current_board, Board &next_board,
                                     long row, long col) {
-    // Update board if living, dead, or newly created cell
+    // Number of neighbors determines if current cell is alive, dead, or
+    // created in the next generation
     unsigned int num_neighbors = count_neighbors(current_board, row, col);
     if (current_board[row][col]) {
         if (num_neighbors < 2) {
@@ -79,11 +73,13 @@ void ConwayGameOfLife::update_board(const Board &current_board, Board &next_boar
 }
 
 void ConwayGameOfLife::populate(long chance_to_live, long seed) {
-    // Randomly populates board with cells
+    // Each element on board has a chance to create a living cell
+    // during initialization
     Board& board = current_board;
     srandom(seed);
     for (int row=0; row < size; ++row) {
         for (int col=0; col < size; ++col) {
+            // Better RNG exist, revisit this!
             bool is_living = (rand() % 100) < chance_to_live;
             if (is_living) {
                 set_cell(board, row, col, 1);
@@ -94,7 +90,7 @@ void ConwayGameOfLife::populate(long chance_to_live, long seed) {
     }
 }
 
-void ConwayGameOfLife::swap(Board &current_board, Board &next_board) {
+void ConwayGameOfLife::swap_boards(Board &current_board, Board &next_board) {
     current_board = next_board;
 }
 
@@ -112,12 +108,13 @@ void ConwayGameOfLife::run_simulation(void) {
                 update_board(current_board, next_board, row, col);
             }
         }
-        swap(current_board, next_board);
+        swap_boards(current_board, next_board);
         generation++;
     }
 }
 
 void ConwayGameOfLife::import_from_file(void) {
+    // Allows for user provided board to be imported
 }
 
 void ConwayGameOfLife::print_board(const Board &board) {
@@ -130,4 +127,5 @@ void ConwayGameOfLife::print_board(const Board &board) {
 }
 
 void ConwayGameOfLife::write_to_file(void) {
+    // Writes each board generation to file (or every nth generation etc)
 }
