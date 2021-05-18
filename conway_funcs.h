@@ -73,7 +73,7 @@ class ConwayGameOfLife {
       void run_simulation(void);
 
       // Utilities
-      void import_from_file(void);
+      void import_from_file(string file, long import_size);
       void print_board(const Board &board);
       void write_to_file(void);
 };

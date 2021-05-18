@@ -1,12 +1,8 @@
 #include<unistd.h>
-#include<cstdlib>
-using std::rand; using std::srand;
+#include<random>
 #include<fstream>
-using std::ifstream; using std::ofstream;
 #include<iostream>
-using std::cout; using std::endl;
 #include<stdexcept>
-using std::range_error;
 #include<string>
 using std::string;
 #include<vector>
@@ -36,7 +32,7 @@ void ConwayGameOfLife::set_cell(Board &board, long row, long col, unsigned int v
     if (value == 0 || value == 1) {
         board[row][col] = value;
     } else {
-        throw range_error("Value must be 0 or 1");
+        throw std::range_error("Value must be 0 or 1");
     }
 }
 
@@ -74,13 +70,15 @@ void ConwayGameOfLife::update_board(const Board &current_board, Board &next_boar
 
 void ConwayGameOfLife::populate(long chance_to_live, long seed) {
     // Each element on board has a chance to create a living cell
-    // during initialization
+    // during initialization. Chance to live is between 1-100.
     Board& board = current_board;
-    srandom(seed);
+
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution<> dist(1, 100);
+
     for (int row=0; row < size; ++row) {
         for (int col=0; col < size; ++col) {
-            // Better RNG exist, revisit this!
-            bool is_living = (rand() % 100) < chance_to_live;
+            bool is_living = dist(gen) <= chance_to_live;
             if (is_living) {
                 set_cell(board, row, col, 1);
             } else {
@@ -95,12 +93,12 @@ void ConwayGameOfLife::swap_boards(Board &current_board, Board &next_board) {
 }
 
 void ConwayGameOfLife::run_simulation(void) {
-    // Needed to keep board displayed longer
+    // Needed to keep board displayed longer in console
     int microsecond = 1000000;
 
     // Play the game
     while (generation <= generation_stop) {
-        cout << "Generation: " << generation << endl;
+        std::cout << "Generation: " << generation << std::endl;
         print_board(current_board);
         usleep(microsecond * print_delay);
         for (int row=0; row < size; ++row) {
@@ -113,16 +111,27 @@ void ConwayGameOfLife::run_simulation(void) {
     }
 }
 
-void ConwayGameOfLife::import_from_file(void) {
+void ConwayGameOfLife::import_from_file(string file, long import_size) {
     // Allows for user provided board to be imported
+    size = import_size;
+    std::ifstream input(file);
+
+    while (!input.eof()) {
+        for (int i=0; i<size; ++i) {
+            for (int j=0; j<size; ++j) {
+                input >> current_board[i][j];
+            }
+        }
+    }
+    input.close();
 }
 
 void ConwayGameOfLife::print_board(const Board &board) {
     for (int row = 0; row < size; ++row) {
         for (int col = 0; col < size; ++col) {
-            cout << board[row][col] << " ";
+            std::cout << board[row][col] << " ";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 }
 
