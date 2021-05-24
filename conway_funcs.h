@@ -3,7 +3,7 @@
 
 /*
   Author: Pham Nguyen
-  Last Update: 5-6-21
+  Last Update: 5-17-21
 
   A naive implement of Conway's Game of
   Life. The game is initialized with two
@@ -29,9 +29,10 @@
   of the board. 
 
   TODO:
-    * Figure out how to write to file
-    * What file format? (csv?)
-    * Try some optimiziations (i.e. buffers)
+    * Allow users to save boards to file
+    * Add python script to visualize board
+    * Allow easier way to manually add cells (loop over vector?)
+    * Investigate optimizations
 */ 
 
 #include<sstream>
@@ -70,6 +71,7 @@ class ConwayGameOfLife {
 
       void set_cell(Board &board, long row, long col, unsigned int value);
       void populate(long chance_to_live = 10, long seed = 8675309); 
+      void empty_board(void);
       void run_simulation(void);
 
       // Utilities

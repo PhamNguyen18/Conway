@@ -1,4 +1,5 @@
 #include<unistd.h>
+#include<algorithm>
 #include<random>
 #include<fstream>
 #include<iostream>
@@ -70,21 +71,33 @@ void ConwayGameOfLife::update_board(const Board &current_board, Board &next_boar
 
 void ConwayGameOfLife::populate(long chance_to_live, long seed) {
     // Each element on board has a chance to create a living cell
-    // during initialization. Chance to live is between 1-100.
+    // during initialization. Chance to live is between 0-100.
     Board& board = current_board;
 
     std::mt19937 gen(seed);
     std::uniform_int_distribution<> dist(1, 100);
 
-    for (int row=0; row < size; ++row) {
-        for (int col=0; col < size; ++col) {
-            bool is_living = dist(gen) <= chance_to_live;
-            if (is_living) {
-                set_cell(board, row, col, 1);
-            } else {
-                continue;
+    if (chance_to_live >= 0 && chance_to_live <= 100) {
+        for (int row=0; row < size; ++row) {
+            for (int col=0; col < size; ++col) {
+                bool is_living = (dist(gen) <= chance_to_live);
+                if (is_living) {
+                    set_cell(board, row, col, 1);
+                } else {
+                    continue;
+                }
             }
         }
+    } else {
+        throw std::out_of_range("Chance to live should be between 0 and 100!");
+    }
+}
+
+void ConwayGameOfLife::empty_board (void) {
+    Board& board = current_board;
+
+    for (auto& row : board) {
+        std::fill(row.begin(), row.end(), 0);
     }
 }
 
@@ -98,6 +111,7 @@ void ConwayGameOfLife::run_simulation(void) {
 
     // Play the game
     while (generation <= generation_stop) {
+        // Move all of this into print function
         std::cout << "Generation: " << generation << std::endl;
         print_board(current_board);
         usleep(microsecond * print_delay);
