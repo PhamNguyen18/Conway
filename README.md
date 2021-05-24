@@ -14,10 +14,18 @@ For more details see the [Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Ga
 
 Usage
 -----
+The Game of Life can be played using either the command line or by creating an instance of the game in a separate file (see `ex_manual_conway.cpp` for an example). 
+
 ### Command Line
 * `-s`, `--size`       :  Specifies the number of elements per side of the board.
-* `-c`, `--chance_living`  : The percent chance that an element on the board will contain a living cell during initialization. Must be an integer between 1 and 100, passed to the 'populate' method. 
+* `-c`, `--chance_living`  : The percent chance that an element on the board will contain a living cell during initialization. Must be an integer between 1 and 100, passed to the `populate` method. 
 * `-g`, `--generation`        : The number of generations to evolve the board for.  
+
+If no arguments are passed, a game will be played using default settings:
+* size = 20
+* chance_living = 25
+* generation = 500
+
 
 ### Manual Setup
 Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying a board size and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
