@@ -45,10 +45,10 @@ game.populate(10);
 
 A second argument can also be passed to seed the random number generator. 
 
-To manually place cells, use the `set_cell` method. The following places a living cell (using the number 1) at the position (10, 10) on the board. Note that the `current_board` must be called to place the cell:
+To manually place cells, use the `set_cell` method. The following places a living cell (using the number 1) at the position (10, 10) on the board. 
 
 ```
-game.set_cell(game.current_board, 10, 10, 1);
+game.set_cell(10, 10, 1);
 ```
 
 A board can also be imported from file. The board size is passed as a second parameter:
