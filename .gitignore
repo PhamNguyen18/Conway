@@ -1,3 +1,10 @@
+# Folders
+out_dir
+
+# Files
+visualize.py
+conway_cmd.cpp
+
 # Prerequisites
 *.d
 

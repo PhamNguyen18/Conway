@@ -14,33 +14,33 @@ using std::vector;
 using BoardRow = vector<unsigned int>;
 using Board = vector<BoardRow>;
 
-unsigned int ConwayGameOfLife::get_cell(const Board &board, long row, long col) {
+unsigned int ConwayGameOfLife::get_cell(long row, long col) {
     // Allows for wrap around behavior for neighbors outside of board limits
     if (row < 0)
-        row = size - 1;
-    if (row == size)
+        row = size_ - 1;
+    else if (row == size_)
         row = 0;
     if (col < 0)
-        col = size - 1;
-    if (col == size)
+        col = size_ - 1;
+    else if (col == size_)
         col = 0;
 
-    return board[row][col];
+    return current_board_[row][col];
 }
 
 
-void ConwayGameOfLife::set_cell(Board &board, long row, long col, unsigned int value) {
+void ConwayGameOfLife::set_cell(long row, long col, unsigned int value) {
     if (value == 0 || value == 1) {
-        board[row][col] = value;
+        current_board_[row][col] = value;
     } else {
         throw std::range_error("Value must be 0 or 1");
     }
 }
 
-unsigned int ConwayGameOfLife::count_neighbors(const Board &board, long row, long col) {
+unsigned int ConwayGameOfLife::count_neighbors(long row, long col) {
     unsigned int living_cells = 0;
     for (auto pos : neighbors) {
-        if (get_cell(board, row + pos[0], col + pos[1])) {
+        if (get_cell(row + pos[0], col + pos[1])) {
             living_cells++;
         } else {
             continue;
@@ -49,22 +49,21 @@ unsigned int ConwayGameOfLife::count_neighbors(const Board &board, long row, lon
     return living_cells;
 }
 
-void ConwayGameOfLife::update_board(const Board &current_board, Board &next_board,
-                                    long row, long col) {
+void ConwayGameOfLife::update_board(long row, long col) {
     // Number of neighbors determines if current cell is alive, dead, or
     // created in the next generation
-    unsigned int num_neighbors = count_neighbors(current_board, row, col);
-    if (current_board[row][col]) {
+    unsigned int num_neighbors = count_neighbors(row, col);
+    if (current_board_[row][col]) {
         if (num_neighbors < 2) {
-            set_cell(next_board, row, col, 0);
+            next_board_[row][col] = 0;
         } else if (num_neighbors == 2 || num_neighbors == 3) {
-            set_cell(next_board, row, col, 1);
+            next_board_[row][col] = 1;
         } else if (num_neighbors > 3) {
-            set_cell(next_board, row, col, 0);
+            next_board_[row][col] = 0;
         }
     } else {
         if (num_neighbors == 3) {
-            set_cell(next_board, row, col, 1);
+            next_board_[row][col] = 1;
         }
     }
 }
@@ -72,17 +71,17 @@ void ConwayGameOfLife::update_board(const Board &current_board, Board &next_boar
 void ConwayGameOfLife::populate(long chance_to_live, long seed) {
     // Each element on board has a chance to create a living cell
     // during initialization. Chance to live is between 0-100.
-    Board& board = current_board;
+    // Board& board = current_board_;
 
     std::mt19937 gen(seed);
     std::uniform_int_distribution<> dist(1, 100);
 
     if (chance_to_live >= 0 && chance_to_live <= 100) {
-        for (int row=0; row < size; ++row) {
-            for (int col=0; col < size; ++col) {
+        for (int row=0; row < size_; ++row) {
+            for (int col=0; col < size_; ++col) {
                 bool is_living = (dist(gen) <= chance_to_live);
                 if (is_living) {
-                    set_cell(board, row, col, 1);
+                    set_cell(row, col, 1);
                 } else {
                     continue;
                 }
@@ -94,15 +93,15 @@ void ConwayGameOfLife::populate(long chance_to_live, long seed) {
 }
 
 void ConwayGameOfLife::empty_board (void) {
-    Board& board = current_board;
+    Board& board = current_board_;
 
     for (auto& row : board) {
         std::fill(row.begin(), row.end(), 0);
     }
 }
 
-void ConwayGameOfLife::swap_boards(Board &current_board, Board &next_board) {
-    current_board = next_board;
+void ConwayGameOfLife::swap_boards(Board &current_board_, Board &next_board_) {
+    current_board_ = next_board_;
 }
 
 void ConwayGameOfLife::run_simulation(void) {
@@ -110,39 +109,55 @@ void ConwayGameOfLife::run_simulation(void) {
     int microsecond = 1000000;
 
     // Play the game
-    while (generation <= generation_stop) {
-        // Move all of this into print function
-        std::cout << "Generation: " << generation << std::endl;
-        print_board(current_board);
-        usleep(microsecond * print_delay);
-        for (int row=0; row < size; ++row) {
-            for (int col=0; col < size; ++col) {
-                update_board(current_board, next_board, row, col);
+    while (generation_ <= generation_stop_) {
+        // More efficient way without checking flags every loop?
+        if (print_to_console_) {
+            print_board(); // current_board_
+            usleep(microsecond * print_delay_);
+        }
+        if (save_history_) {
+            game_history_[generation_] = current_board_;
+        }
+        for (int row=0; row < size_; ++row) {
+            for (int col=0; col < size_; ++col) {
+                update_board(row, col);
             }
         }
-        swap_boards(current_board, next_board);
-        generation++;
+        swap_boards(current_board_, next_board_);
+        generation_++;
     }
 }
 
 void ConwayGameOfLife::import_from_file(string file, long import_size) {
-    // Allows for user provided board to be imported
-    size = import_size;
+    // Allows user to import their own board 
+    // TODO: Auto detect dimensions
+    // Maybe have first line for num row and cols?
+    size_ = import_size;
     std::ifstream input(file);
 
     while (!input.eof()) {
-        for (int i=0; i<size; ++i) {
-            for (int j=0; j<size; ++j) {
-                input >> current_board[i][j];
+        for (int i=0; i<size_; ++i) {
+            for (int j=0; j<size_; ++j) {
+                input >> current_board_[i][j];
             }
         }
     }
     input.close();
 }
 
-void ConwayGameOfLife::print_board(const Board &board) {
-    for (int row = 0; row < size; ++row) {
-        for (int col = 0; col < size; ++col) {
+void ConwayGameOfLife::print_board(long generation) {
+    // Either prints the current board or a user specified generation
+    Board &board = current_board_;
+    long generation_print = generation_;
+
+    if (generation >= 0) {
+        board = game_history_[generation];
+        generation_print = generation;
+    }
+
+    std::cout << "Generation: " << generation_print << std::endl;
+    for (int row = 0; row < size_; ++row) {
+        for (int col = 0; col < size_; ++col) {
             std::cout << board[row][col] << " ";
         }
         std::cout << std::endl;
@@ -150,5 +165,23 @@ void ConwayGameOfLife::print_board(const Board &board) {
 }
 
 void ConwayGameOfLife::write_to_file(void) {
+    // Easier to write to 1D board. Think about file structure
     // Writes each board generation to file (or every nth generation etc)
+    std::ofstream out_file;
+    out_file.open(out_file_name_);
+    out_file << size_ << std::endl;
+    /*
+
+    for (const auto& get_pair : game_history_) {
+        out_file << get_pair.first;
+        // This won't work since get_pair.second is a 2D vector
+        // Need to unroll more
+        for (const auto& e : get_pair.second) {
+            std::cout << e;
+        }
+        out_file << std::endl;
+    }
+    */
+
+    out_file.close();
 }

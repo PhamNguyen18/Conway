@@ -16,16 +16,19 @@ Usage
 -----
 The Game of Life can be played using either the command line or by creating an instance of the game in a separate file (see `ex_manual_conway.cpp` for an example). 
 
+| :warning: WARNING          |
+|:---------------------------|
+| The command line interface does not currently work |
+
 ### Command Line
 * `-s`, `--size`       :  Specifies the number of elements per side of the board.
 * `-c`, `--chance_living`  : The percent chance that an element on the board will contain a living cell during initialization. Must be an integer between 1 and 100, passed to the `populate` method. 
 * `-g`, `--generation`        : The number of generations to evolve the board for.  
 
-If no arguments are passed, a game will be played using default settings:
+If no options are passed, a game will be played using default settings:
 * size = 20
 * chance_living = 25
 * generation = 500
-
 
 ### Manual Setup
 Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying a board size and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
@@ -57,11 +60,12 @@ game.import_from_file("myboard.txt", 10);
 Finally, the `print_delay` method can be used to specify the rate at which a board is printed to console in seconds. The following prints a board every 0.25s:
 
 ```
-game.print_delay = 0.25;
+game.print_delay_ = 0.25;
 ```
 
 ### TODO:
 * Allow users to save boards to file
 * Add python script to visualize board (images and videos)
-* Explore performance improvements
+* Restructure project files in repo
+* Explore performance improvements (try 1D vector)
 

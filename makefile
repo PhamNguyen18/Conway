@@ -2,7 +2,7 @@
  .SUFFIXES:
 PROG = conway 
 CC = g++
-CFLAGS = -std=c++17 -Wall -g
+CFLAGS = -std=c++17 -Wall -g -O2
 LDLIBS = -lm
 OBJS = conway.o conway_funcs.o
 
