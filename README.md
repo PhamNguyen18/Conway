@@ -14,7 +14,7 @@ For more details see the [Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Ga
 
 Dependencies
 ------------
-* C++11 
+* C++17 
 * Python 3.6+ 
 * Matplotlib 2.0+
 
@@ -32,15 +32,16 @@ The Game of Life can be played using either the command line or by creating an i
 * `-g`, `--generation`        : The number of generations to evolve the board for.  
 
 If no options are passed, a game will be played using default settings:
-* size = 20
-* chance_living = 25
+* col = 20
+* row = 20
+* chance_living = 20
 * generation = 500
 
 ### Manual Setup
 Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying a board size and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
 
 ```
-ConwayGameOfLife game(20, 500); 
+ConwayGameOfLife game(20, 20, 500); 
 ```
 
 The board can be populated either with randomly generated or user defined cells. The following will give each element on the board a 10% chance to generated a living cell:
@@ -57,11 +58,13 @@ To manually place cells, use the `set_cell` method. The following places a livin
 game.set_cell(10, 10, 1);
 ```
 
-A board can also be imported from file. The board size is passed as a second parameter:
+A board can also be imported from file. The board row and column sizes are passed as parameters:
 
 ```
-game.import_from_file("myboard.txt", 10);
+ConwayGameOfLife game(8, 9, 100);
+game.import_from_file("light_spaceship.txt", 8, 9);
 ```
+Note that the `game` instance requires the row and column sizes, too! 
 
 Finally, the `print_delay` method can be used to specify the rate at which a board is printed to console in seconds. The following prints a board every 0.25s:
 
@@ -69,9 +72,21 @@ Finally, the `print_delay` method can be used to specify the rate at which a boa
 game.print_delay_ = 0.25;
 ```
 
+### Visulation (Documentaiton in progress)
+Games of life can be viewed in termainal by setting `print_to_console` to `true` in your main game file. More pleasing visuals can be created by using the provided `visualize.py` module. First, a file must be created that saves each generation of cells as the game evolves. This can be done by setting the following in your game file:
+
+```
+game.write_to_file();
+```
+This will generation a TXT file (default name is game_out.txt) that can be used by the module. A video can be generated quick by simply running the module in the command line:
+
+```
+python visualize.py
+```
+
 ### TODO:
-* Allow users to save boards to file
-* Add python script to visualize board (images and videos)
+* Enhance import file function to automatically detect row and column size of the board
+* Enhance visualization module (display generations for videos, command line arguments, etc)
 * Restructure project files in repo
-* Explore performance improvements (try 1D vector)
+* Explore performance improvements (bit operations) 
 

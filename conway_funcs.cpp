@@ -136,6 +136,7 @@ void ConwayGameOfLife::import_from_file(string file, long row, long col) {
     std::ifstream input(file);
     row_ = row;
     col_ = col;
+    
 
     while (!input.eof()) {
         for (int row = 0; row < row_; ++row) {
