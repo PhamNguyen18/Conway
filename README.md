@@ -12,6 +12,12 @@ For neighbors that lay outside the board, the code will "wrap around" and check 
 
 For more details see the [Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) entry.
 
+Dependencies
+------------
+* C++11 
+* Python 3.6+ 
+* Matplotlib 2.0+
+
 Usage
 -----
 The Game of Life can be played using either the command line or by creating an instance of the game in a separate file (see `ex_manual_conway.cpp` for an example). 
