@@ -72,13 +72,13 @@ Finally, the `print_delay` method can be used to specify the rate at which a boa
 game.print_delay_ = 0.25;
 ```
 
-### Visulation (Documentaiton in progress)
-Games of life can be viewed in termainal by setting `print_to_console` to `true` in your main game file. More pleasing visuals can be created by using the provided `visualize.py` module. First, a file must be created that saves each generation of cells as the game evolves. This can be done by setting the following in your game file:
+### Visulation (Documentation in progress)
+Games of life can be viewed in terminal by setting `print_to_console_` to `true` in your main game file. More pleasing visuals can be created by using the provided `visualize.py` module. First, a file must be created that saves each generation of cells as the game evolves. This can be done by setting the following in your game file:
 
 ```
 game.write_to_file();
 ```
-This will generation a TXT file (default name is game_out.txt) that can be used by the module. A video can be generated quick by simply running the module in the command line:
+This will generate a TXT file (default name is game_out.txt) that can be used by the module. A video can be made by simply running the module in the command line:
 
 ```
 python visualize.py
