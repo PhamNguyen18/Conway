@@ -20,7 +20,7 @@ Dependencies
 
 Usage
 -----
-The Game of Life can be played using either the command line or by creating an instance of the game in a separate file (see `ex_manual_conway.cpp` for an example). 
+The Game of Life can be played using either the command line (unavailable at this point) or by creating an instance of the game in a separate file (see `conway.cpp` for an example). 
 
 | :warning: WARNING          |
 |:---------------------------|
@@ -72,7 +72,7 @@ Finally, the `print_delay` method can be used to specify the rate at which a boa
 game.print_delay_ = 0.25;
 ```
 
-### Visulation (Documentation in progress)
+### Visualization (Documentation in progress)
 Games of life can be viewed in terminal by setting `print_to_console_` to `true` in your main game file. More pleasing visuals can be created by using the provided `visualize.py` module. First, a file must be created that saves each generation of cells as the game evolves. This can be done by setting the following in your game file:
 
 ```
@@ -89,4 +89,4 @@ python visualize.py
 * Enhance visualization module (display generations for videos, command line arguments, etc)
 * Restructure project files in repo
 * Explore performance improvements (bit operations) 
-
+* Hyperlink sections in README
