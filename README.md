@@ -31,12 +31,6 @@ The Game of Life can be played using either the command line (unavailable at thi
 * `-c`, `--chance_living`  : The percent chance that an element on the board will contain a living cell during initialization. Must be an integer between 1 and 100, passed to the `populate` method. 
 * `-g`, `--generation`        : The number of generations to evolve the board for.  
 
-If no options are passed, a game will be played using default settings:
-* col = 20
-* row = 20
-* chance_living = 20
-* generation = 500
-
 ### Manual Setup
 Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying a board size and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
 
@@ -89,4 +83,3 @@ python visualize.py
 * Enhance visualization module (display generations for videos, command line arguments, etc)
 * Restructure project files in repo
 * Explore performance improvements (bit operations) 
-* Hyperlink sections in README
