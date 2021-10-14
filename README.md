@@ -30,6 +30,7 @@ git clone https://github.com/PhamNguyen18/Conway.git
 After setting up a game file (see the usage section), use `make` and run the executable. 
 
 
+<<<<<<< HEAD
 ## Dependencies
 ---
 * C++17 
@@ -40,6 +41,10 @@ After setting up a game file (see the usage section), use `make` and run the exe
 ## Usage
 ---
 The Game of Life can be played by creating an instance of the game in a separate file (see `conway.test.cpp` for an example). Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying the number of rows, columns, and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
+=======
+### Manual Setup
+Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying a board size and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
+>>>>>>> e2e2e3af36c4ab7e892666ec7fdcc49164361189
 
 ```C++
 ConwayGameOfLife game(20, 20, 500); 
@@ -110,4 +115,8 @@ optional arguments:
 ---
 * Enhance import file function to automatically detect row and column size of the board
 * Restructure project files in repo
+<<<<<<< HEAD
 * Explore performance improvements (bit operations) 
+=======
+* Explore performance improvements (bit operations) 
+>>>>>>> e2e2e3af36c4ab7e892666ec7fdcc49164361189
