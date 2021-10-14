@@ -1,13 +1,11 @@
 # Conway
 
-### Introduction
----
+## Introduction
 This repository contains a simple implementation of Conway's Game of Life. The Game of Life uses a simple set of rules to evolve an initial board of 'cells' without further user input. This initial state takes the form of a 2D board with each element containing either a living "cell" or a dead "cell". [Higher dimensional](https://github.com/bruzewskis/HyperLife)  boards are also possible. 
 
 ![conway_game](docs/vid/conway_game.gif)
 
 ## Rules
----
 The board is updated according to the following rules based on the state of the surround neighbors for each living or dead cell: 
 
 * A living cell will survive if it has two or three living neighbors
@@ -19,7 +17,6 @@ For neighbors that lay outside the board, the code will "wrap around" and check 
 For more details see the [Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) entry.
 
 ## Installation
----
 
 Simply clone the repository to your chosen directory using:
 
@@ -31,14 +28,12 @@ After setting up a game file (see the usage section), use `make` and run the exe
 
 
 ## Dependencies
----
 * C++17 
 * Python 3.6+ 
 * Matplotlib 2.0+
 * Numpy 1.20+
 
 ## Usage
----
 The Game of Life can be played by creating an instance of the game in a separate file (see `conway.test.cpp` for an example). Since the board evolves on its own, the user only has direct control over the initial conditions of the game. A game can be initialized by specifying the number of rows, columns, and the total number of generations to evolve the board over or by importing from file. The example below creates a 20 by 20 board that will evolve over 500 generations:
 
 ```C++
@@ -74,7 +69,6 @@ game.print_delay_ = 0.25;
 ```
 
 ## Visualization 
----
 Games of life can be viewed in terminal by setting `print_to_console_` to `true` in your main game file. Dead cells are shown as 0's and living cells as 1's. More pleasing visuals can be created by using the provided `visualize.py` module. First, a file must be created that saves each generation of cells as the game evolves. This can be done by setting the following in your game file:
 
 ```C++
@@ -105,9 +99,7 @@ optional arguments:
 
 ```
 
-
 ## TODO:
----
 * Enhance import file function to automatically detect row and column size of the board
 * Restructure project files in repo
 * Explore performance improvements (bit operations) 
